@@ -1,0 +1,11 @@
+#unorderedList{
+    display: flex;
+}
+#unorderedList li{
+    margin-right: 3rem;
+}
+/*<form action="" id="letter-form">
+<label for="letter">Entrez une lettre</label>
+<input type="text" id="letter" maxlength="1" required>
+<button id="letter-submit" type="submit">Essayer</button>
+</form>*/
