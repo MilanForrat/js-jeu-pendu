@@ -1,21 +1,42 @@
-let wordToFind = "hello";
+let randomWord = "bonjour";
 let inputLetterValue;
 let badLetters = [];
-const containerHTML = document.getElementsByClassName('container');
+const containerHTML = document.getElementById('container');
 
-function play(){
+function play(randomWord){
     
-    loadHTML();
+    loadHTML(randomWord);
 
     listeners();
 }
-play();
 
-function loadHTML(){
+
+function loadHTML(randomWord){
+
+    // img creation
+    let hangmanImg = document.createElement('img');
+    hangmanImg.setAttribute('src', "./images/game-start-standard.png");
+    hangmanImg.setAttribute("alt", "Structure du jeu du pendu (sol et potence bois)");
+    hangmanImg.id = "hangman-img";
+    containerHTML.appendChild(hangmanImg);
+
+    // word to find creation
+    let findWordList = document.createElement('ul');
+    findWordList.id = "word-to-find";
+    containerHTML.appendChild(findWordList);
+
+    // li creation depending on number of caracters in word to find
+    for(let i = 0; i < randomWord.length; i++){
+        let letterSpacing = randomWord.substring(i,i+1);
+        let letterSpacingLi = document.createElement('li');
+        letterSpacingLi.innerHTML=letterSpacing;
+        findWordList.appendChild(letterSpacingLi);
+    }
+
     // form creation
     let formHTML = document.createElement("FORM");
     formHTML.id = "letter-form";
-    containerHTML[0].appendChild(formHTML);
+    containerHTML.appendChild(formHTML);
 
     // label creation
     let labelHTML = document.createElement('label');
@@ -46,7 +67,7 @@ function loadHTML(){
     // ul creation
     let unorderedList = document.createElement("ul");
     unorderedList.id = "unorderedList";
-    containerHTML[0].appendChild(unorderedList);
+    containerHTML.appendChild(unorderedList);
 }
 
 function listeners(){
@@ -63,16 +84,36 @@ function listeners(){
 
 function compare(letterToTest){
 
+    let inputHTML = document.getElementById('letter');
+    let liElement = document.getElementsByTagName('li');
 
-    if(wordToFind.includes(letterToTest)){
+
+    if(randomWord.includes(letterToTest)){
         console.log("OUI !!");
+        let indexOfLetter = randomWord.indexOf(letterToTest);
+
+        // WIP
+        randomWord.array.forEach(l =>
+        {
+            if(l == letterToTest)     
+            {
+                liElement[indexOfLetter].style.visibility = "visible";
+            }       
+        });
+
+        
     }
     else{
-        badLetters.push(letterToTest);
-        console.log("NON !");
-        console.log(badLetters);
-        let listElement = document.createElement('li');
-        listElement.innerHTML=letterToTest;
-        unorderedList.appendChild(listElement);
+        if(badLetters.includes(letterToTest)){
+            // vous avez déjà saisi 
+            inputHTML.value ="";
+            inputHTML.placeholder = "Vous avez déjà saisi la lettre ",letterToTest;
+        }else{
+            badLetters.push(letterToTest);
+            let listElement = document.createElement('li');
+            listElement.innerHTML=letterToTest;
+            unorderedList.appendChild(listElement);
+        }
     }
 }
+play(randomWord);

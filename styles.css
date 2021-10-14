@@ -4,8 +4,18 @@
 #unorderedList li{
     margin-right: 3rem;
 }
-/*<form action="" id="letter-form">
-<label for="letter">Entrez une lettre</label>
-<input type="text" id="letter" maxlength="1" required>
-<button id="letter-submit" type="submit">Essayer</button>
-</form>*/
+#word-to-find li{
+    display: inline-block;
+    font-size: 60px;
+    width: 60px;
+    margin-right: 20px;
+    position: relative;
+    visibility: hidden;    
+}
+#word-to-find li::after{
+    content: "_";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: visible;
+}
