@@ -2,20 +2,16 @@ let randomWord = "yo";
 let inputLetterValue;
 let testedLetters = [];
 let userWord = [];
+let badLetter = 0;
 const containerHTML = document.getElementById('container');
 
 function play(randomWord){
-    
     loadHTML(randomWord);
-
     listeners();
-
     assignIndexUserWord(randomWord);
 }
 
-
 function loadHTML(randomWord){
-
     // img creation
     let hangmanImg = document.createElement('img');
     hangmanImg.setAttribute('src', "./images/game-start-standard.png");
@@ -80,13 +76,26 @@ function listeners(){
     submitLetter.addEventListener("submit", (e) =>{
         e.preventDefault(); 
         inputLetterValue = inputLetter.value;
-        compare(inputLetterValue)
+        checkLetter(inputLetterValue);
     });
 }
 
 function assignIndexUserWord(randomWord){
     for(let i = 0; i < randomWord.length; i++){
         userWord.push("?");
+    }
+}
+
+function checkLetter(letterToTest){
+    let inputHTML = document.getElementById('letter');
+    let onlyLettersVerification = /^[A-Za-z]+$/;
+
+    if(letterToTest == "" || letterToTest == " " || !letterToTest.match(onlyLettersVerification)){
+        inputHTML.value ="";
+        inputHTML.placeholder = "Veuillez saisir une lettre...";
+        return;
+    }else{
+        compare(letterToTest);
     }
 }
 
@@ -100,15 +109,30 @@ function compare(letterToTest){
         showCharacters(letterToTest);
     }
     else{
-        if(testedLetters==true){
-            // vous avez déjà saisi 
+        if(testedLetters.includes(letterToTest)){
             inputHTML.value ="";
-            inputHTML.placeholder = "Vous avez déjà saisi la lettre ",letterToTest;
+            inputHTML.placeholder = "Vous avez déjà saisi la lettre :"+letterToTest+" !";
         }
         else{
+            inputHTML.value ="";
+            inputHTML.placeholder = "Mince, cette lettre ne fait partie du mot...";
             pushLettersTested(letterToTest);
-            console.log("bouuuh");
+            badLetter++;
+            changeImg(badLetter);
         }
+    }
+
+    function changeImg(badLetter){
+        let img = document.getElementById('hangman-img');
+        if(badLetter <= 7){
+            img.setAttribute('src', "./images/standard-"+badLetter+".png");
+        }else{
+            looseGame();
+        }
+    }
+
+    function looseGame(){
+        console.log("perdu !");
     }
 
     function pushLettersTested(letter){
@@ -124,6 +148,14 @@ function compare(letterToTest){
     }
 
     function showCharacters(letter){
+        if(!testedLetters.includes(letter)){
+            inputHTML.value ="";
+            inputHTML.placeholder = "Bravo, "+letter+" fait bien partie du mot !";
+        }else{
+            inputHTML.value ="";
+            inputHTML.placeholder = "Vous avez déjà saisi la lettre : "+letterToTest+" !";
+        }
+       
         for(let i = 0; i < randomWord.length; i++) {
             if(randomWord[i] == letter){
                 liElement[i].style.visibility = "visible";
