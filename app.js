@@ -1,6 +1,7 @@
-let randomWord = "bonjour";
+let randomWord = "yo";
 let inputLetterValue;
-let badLetters = [];
+let testedLetters = [];
+let userWord = [];
 const containerHTML = document.getElementById('container');
 
 function play(randomWord){
@@ -8,6 +9,8 @@ function play(randomWord){
     loadHTML(randomWord);
 
     listeners();
+
+    assignIndexUserWord(randomWord);
 }
 
 
@@ -77,9 +80,14 @@ function listeners(){
     submitLetter.addEventListener("submit", (e) =>{
         e.preventDefault(); 
         inputLetterValue = inputLetter.value;
-        console.log(inputLetterValue);
         compare(inputLetterValue)
     });
+}
+
+function assignIndexUserWord(randomWord){
+    for(let i = 0; i < randomWord.length; i++){
+        userWord.push("?");
+    }
 }
 
 function compare(letterToTest){
@@ -87,32 +95,49 @@ function compare(letterToTest){
     let inputHTML = document.getElementById('letter');
     let liElement = document.getElementsByTagName('li');
 
-
     if(randomWord.includes(letterToTest)){
-        console.log("OUI !!");
-        let indexOfLetter = randomWord.indexOf(letterToTest);
-
-        // WIP
-        randomWord.array.forEach(l =>
-        {
-            if(l == letterToTest)     
-            {
-                liElement[indexOfLetter].style.visibility = "visible";
-            }       
-        });
-
-        
+        pushLettersTested(letterToTest);
+        showCharacters(letterToTest);
     }
     else{
-        if(badLetters.includes(letterToTest)){
+        if(testedLetters==true){
             // vous avez déjà saisi 
             inputHTML.value ="";
             inputHTML.placeholder = "Vous avez déjà saisi la lettre ",letterToTest;
+        }
+        else{
+            pushLettersTested(letterToTest);
+            console.log("bouuuh");
+        }
+    }
+
+    function pushLettersTested(letter){
+        if(testedLetters.includes(letterToTest)){
+            return true;
         }else{
-            badLetters.push(letterToTest);
+            testedLetters.push(letter);
             let listElement = document.createElement('li');
-            listElement.innerHTML=letterToTest;
+            listElement.innerHTML=letter;
             unorderedList.appendChild(listElement);
+            return false;
+        }
+    }
+
+    function showCharacters(letter){
+        for(let i = 0; i < randomWord.length; i++) {
+            if(randomWord[i] == letter){
+                liElement[i].style.visibility = "visible";
+                userWord[i] = letter;
+            }
+        }
+        checkWin();
+    }
+
+    function checkWin(){
+        let stringUserWord = userWord.toString();
+        let newStrUserWord = stringUserWord.replace(/,/g,'');
+        if(randomWord == newStrUserWord){
+            console.log("wiiiiiiiiiiiiin !!!! enfin ");
         }
     }
 }
