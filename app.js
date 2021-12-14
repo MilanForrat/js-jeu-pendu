@@ -1,4 +1,4 @@
-let randomWord = "yo";
+let randomWord = "lol";
 let inputLetterValue;
 let testedLetters = [];
 let userWord = [];
@@ -88,11 +88,11 @@ function assignIndexUserWord(randomWord){
 
 function checkLetter(letterToTest){
     let inputHTML = document.getElementById('letter');
-    let onlyLettersVerification = /^[A-Za-z]+$/;
+    let onlyLettersVerification = /^[a-z]+$/;
 
     if(letterToTest == "" || letterToTest == " " || !letterToTest.match(onlyLettersVerification)){
         inputHTML.value ="";
-        inputHTML.placeholder = "Veuillez saisir une lettre...";
+        inputHTML.placeholder = "Veuillez saisir une lettre minuscule...";
         return;
     }else{
         compare(letterToTest);
